@@ -1,7 +1,14 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"back/middlewares"
+
+	"github.com/gin-gonic/gin"
+)
 
 func RegisterRoutes(server *gin.Engine) {
-	server.POST("/users", createUser)
+	mainServer := server.Group("/")
+	mainServer.Use(middlewares.CORSMiddleware())
+	mainServer.POST("/users", createUser)
+	mainServer.GET("/products", getProducts)
 }
