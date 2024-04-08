@@ -1,14 +1,22 @@
 package routes
 
 import (
-	"back/middlewares"
-
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterRoutes(server *gin.Engine) {
-	mainServer := server.Group("/")
-	mainServer.Use(middlewares.CORSMiddleware())
-	mainServer.POST("/users", createUser)
-	mainServer.GET("/products", getProducts)
+	server.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * 60 * 60, // Maximum value not ignored by any of major browsers
+	}))
+
+	// mainServer := server.Group("/")
+	// mainServer.Use(middlewares.CORSMiddleware())
+	server.POST("/users", createUser)
+	server.GET("/products", getProducts)
 }
