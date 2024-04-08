@@ -4,6 +4,8 @@ import "./styles/global.css";
 import "./styles/tailwind.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ConfigProvider, Button, Space, Input, Divider } from "antd";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -14,7 +16,29 @@ const client = new QueryClient({});
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={client}>
-      <App />
+      <BrowserRouter>
+        <ConfigProvider
+          theme={{
+            components: {
+              Button: {
+                colorPrimary: "#243F2F",
+                algorithm: true, // Enable algorithm
+                colorLink: "red",
+              },
+              Input: {
+                colorPrimary: "#243F2F",
+                algorithm: true, // Enable algorithm
+              },
+              Checkbox: {
+                colorPrimary: "#243F2F",
+                algorithm: true,
+              },
+            },
+          }}
+        >
+          <App />
+        </ConfigProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>
 );

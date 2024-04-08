@@ -16,7 +16,7 @@ export const useCreate = () => {
     mutationFn: async (props: any) => {
       const { data, url } = props;
       const res = await axios.post(
-        `https://api-panel-ds-dev.kalaresanehasti.com/api/v1/${url}`,
+        `http://localhost:8080/${url}`,
         data
         // {
         //   headers: {
