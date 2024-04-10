@@ -27,8 +27,11 @@ root.render(
               },
               Input: {
                 colorPrimary: "#243F2F",
-                algorithm: true, // Enable algorithm
+                algorithm: true, // Enable algorithm,
+                fontSize: 16,
+                colorBgBase: "#EDF5EC",
               },
+
               Checkbox: {
                 colorPrimary: "#243F2F",
                 algorithm: true,

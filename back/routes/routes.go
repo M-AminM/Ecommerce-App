@@ -15,8 +15,7 @@ func RegisterRoutes(server *gin.Engine) {
 		MaxAge:           12 * 60 * 60, // Maximum value not ignored by any of major browsers
 	}))
 
-	// mainServer := server.Group("/")
-	// mainServer.Use(middlewares.CORSMiddleware())
 	server.POST("/users", createUser)
 	server.GET("/products", getProducts)
+	server.GET("/products/:categoryId", getProductsByCategoryId)
 }

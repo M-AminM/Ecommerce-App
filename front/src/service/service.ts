@@ -32,7 +32,7 @@ export const useCreate = () => {
 
 export const fetcher = async ({ queryKey }: any) => {
   const [url, params] = queryKey;
-  const res = await axios.get(`http://localhost:8080/${url}`, {
+  const res = await axios.get(`http://localhost:8080/${url}/1`, {
     params: params,
     //   headers: {
     //     Authorization: `Bearer ${localStorage.getItem('token1')}`,
