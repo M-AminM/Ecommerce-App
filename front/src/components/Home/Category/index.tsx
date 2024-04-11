@@ -19,7 +19,7 @@ const Category: FC = () => {
       <div className="flex gap-14">
         {categories.map((category) => (
           <img
-            className="w-24 rounded-lg cursor-pointer"
+            className="w-24 rounded-lg cursor-pointer relative top-0 transition-all ease-in duration-100 hover:scale-110"
             src={require(`../../../assets/images/${category.name}.png`)}
             alt={category.name}
             key={category.name}

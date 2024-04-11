@@ -56,3 +56,16 @@ func GetProductByCategoryId(categoryId int64) ([]Product, error) {
 	}
 	return products, nil
 }
+
+func GetProductById(id int64) (*Product, error) {
+	row := db.DB.QueryRow("SELECT * from products where id=?", id)
+
+	var product Product
+
+	err := row.Scan(&product.ID, &product.Name, &product.Description, &product.Price, &product.Discount, &product.Category_Id, &product.Quantity, &product.Image_Url)
+	if err != nil {
+		return nil, err
+	}
+
+	return &product, nil
+}

@@ -1,12 +1,11 @@
 import React, { type FC } from "react";
 import {
-  AudioOutlined,
-  MenuOutlined,
-  SearchOutlined,
-  ShoppingCartOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Input, Space } from "antd";
+  RiShoppingCartLine,
+  RiUserLine,
+  RiMenuLine,
+  RiSearchLine,
+} from "react-icons/ri";
+import { Input } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const { Search } = Input;
@@ -18,7 +17,7 @@ const Header: FC = () => {
   const navigate = useNavigate();
   return (
     <div className="flex justify-between items-center px-10 py-4 bg-white">
-      <MenuOutlined className="text-xl cursor-pointer hover:text-[#00D783] duration-150 md:hidden" />
+      <RiMenuLine className="text-xl cursor-pointer hover:text-[#00D783] duration-150 md:hidden" />
       <img
         onClick={() => {
           navigate("/");
@@ -32,15 +31,15 @@ const Header: FC = () => {
         onChange={(e) => {
           console.log(e.target.value);
         }}
-        prefix={<SearchOutlined className="text-[#243F2F] pr-2" />}
+        prefix={<RiSearchLine className="text-[#243F2F] pr-2 text-2xl" />}
         className="hidden h-10 md:w-1/3 md:flex"
       />
       <div className="flex gap-4">
-        <UserOutlined
+        <RiUserLine
           className="text-xl cursor-pointer hover:text-[#00D783] duration-150"
           onClick={() => navigate("/login")}
         />
-        <ShoppingCartOutlined className="text-2xl cursor-pointer hover:text-[#00D783] duration-150" />
+        <RiShoppingCartLine className="text-xl cursor-pointer hover:text-[#00D783] duration-150" />
       </div>
     </div>
   );

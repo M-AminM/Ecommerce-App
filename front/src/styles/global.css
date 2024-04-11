@@ -18,3 +18,18 @@ code {
   background-size: cover;
   height: 70vh;
 }
+.search-container {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 900px;
+}
+
+.search-item {
+  padding: 30px 10px;
+  border: 1px solid grey;
+  text-align: center;
+  margin: 5px;
+  width: 150px;
+  flex-basis: 150px;
+  flex-grow: 1;
+}

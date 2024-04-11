@@ -31,7 +31,10 @@ root.render(
                 fontSize: 16,
                 colorBgBase: "#EDF5EC",
               },
-
+              Slider: {
+                colorPrimary: "#243F2F",
+                algorithm: true,
+              },
               Checkbox: {
                 colorPrimary: "#243F2F",
                 algorithm: true,

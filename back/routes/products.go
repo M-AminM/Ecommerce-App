@@ -33,3 +33,19 @@ func getProductsByCategoryId(context *gin.Context) {
 
 	context.JSON(http.StatusOK, gin.H{"message": "success", "products": product})
 }
+
+func getProductById(context *gin.Context) {
+	productId, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "could not parse product id"})
+		return
+	}
+
+	product, err := models.GetProductById(productId)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "success", "products": product})
+}
