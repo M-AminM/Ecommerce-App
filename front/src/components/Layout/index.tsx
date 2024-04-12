@@ -4,9 +4,9 @@ import Header from "./Header";
 
 const Layout: FC = () => {
   return (
-    <div className="">
+    <div className="relative">
       <Header />
-      <div className="px-10 py-6">
+      <div className="px-2 py-4 md:px-10">
         <Outlet />
       </div>
     </div>

@@ -1,11 +1,11 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { type FC } from "react";
+import { useParams } from "react-router-dom";
 import { useFetch } from "../../service/service";
-import { RiShoppingCartLine } from "react-icons/ri";
 import type { MenuProps, SliderSingleProps } from "antd";
-import { Button, Dropdown, Space } from "antd";
-import { RiArrowDownSLine } from "react-icons/ri";
+import { Button, Dropdown, Space, Spin } from "antd";
 import { Slider } from "antd";
+import { RiArrowDownSLine } from "react-icons/ri";
+import ProductList from "../../components/ProductList";
 
 const onChange = (value: number | number[]) => {
   console.log("onChange: ", value);
@@ -29,6 +29,7 @@ const items: MenuProps["items"] = [
     key: "3",
   },
 ];
+
 const formatter: NonNullable<SliderSingleProps["tooltip"]>["formatter"] = (
   value
 ) => `$${value}`;
@@ -41,22 +42,27 @@ enum Category {
   drinks,
 }
 
-const ProductCategory = () => {
+const ProductCategoryPage: FC = () => {
   const { category }: any = useParams();
-
-  const { data, isPending } = useFetch(
+  const { data, isPending, isError } = useFetch(
     `products/category/${Category[category!]}`
   );
-  console.log(isPending);
 
-  const navigate = useNavigate();
   if (isPending) {
-    return <div className="flex justify-center items-center">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <div>Something wrong happened</div>;
   }
 
   return (
     <div className="bg-white rounded-2xl flex border border-[#D9E7D6] border-r-0 border-b-0">
-      <div className="rounded-l-2xl h-full w-52 p-4">
+      <div className="hidden md:block rounded-l-2xl h-full w-52 p-4">
         <span className="text-[#243F2F] font-semibold text-lg">Price</span>
         <Slider
           range
@@ -91,47 +97,10 @@ const ProductCategory = () => {
             </a>
           </Dropdown>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-          {data?.data.products.map((product: any, index: number) => (
-            <div
-              className={` border-r border-b border-[#D9E7D6] p-4 ${
-                data?.data.products.length - 1 === index ? "rounded-br-2xl" : ""
-              }`}
-            >
-              <div
-                className="cursor-pointer"
-                onClick={() => navigate(`./${product.id}`)}
-              >
-                <div className="relative flex justify-center">
-                  <img className="w-48" src={product.image_url} />
-                  {product.discount !== 0 && (
-                    <span className="bg-red-400 text-white font-semibold px-4 py-0.5 rounded-xl text-xs absolute top-0 left-0">
-                      {product.discount}%
-                    </span>
-                  )}
-                </div>
-
-                <h3 className="font-semibold">{product.name}</h3>
-                <p className="text-xs text-[#66796E] h-20">
-                  {product.description}
-                </p>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-[#02A460]">
-                  ${product.price}
-                </span>
-                <div className="bg-[#EFF5EE] hover:bg-[#212121] hover:text-[#fff] duration-300 rounded-full p-3 cursor-pointer">
-                  <RiShoppingCartLine className="text-base cursor-pointer" />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <ProductList data={data?.data.products} />
       </div>
     </div>
   );
 };
 
-export default ProductCategory;
+export default ProductCategoryPage;

@@ -16,7 +16,7 @@ const { Search } = Input;
 const Header: FC = () => {
   const navigate = useNavigate();
   return (
-    <div className="flex justify-between items-center px-10 py-4 bg-white">
+    <div className="bg-white flex justify-between items-center px-4 py-4 md:px-10 sticky top-0 left-0 z-10">
       <RiMenuLine className="text-xl cursor-pointer hover:text-[#00D783] duration-150 md:hidden" />
       <img
         onClick={() => {

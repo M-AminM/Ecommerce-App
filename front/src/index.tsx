@@ -4,7 +4,7 @@ import "./styles/global.css";
 import "./styles/tailwind.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConfigProvider, Button, Space, Input, Divider } from "antd";
+import { ConfigProvider } from "antd";
 import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
@@ -22,12 +22,12 @@ root.render(
             components: {
               Button: {
                 colorPrimary: "#243F2F",
-                algorithm: true, // Enable algorithm
+                algorithm: true,
                 colorLink: "red",
               },
               Input: {
                 colorPrimary: "#243F2F",
-                algorithm: true, // Enable algorithm,
+                algorithm: true,
                 fontSize: 16,
                 colorBgBase: "#EDF5EC",
               },
@@ -36,6 +36,10 @@ root.render(
                 algorithm: true,
               },
               Checkbox: {
+                colorPrimary: "#243F2F",
+                algorithm: true,
+              },
+              Spin: {
                 colorPrimary: "#243F2F",
                 algorithm: true,
               },

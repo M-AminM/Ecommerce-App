@@ -16,6 +16,7 @@ code {
 .home_page {
   background-image: url("../assets/images/header.jpg");
   background-size: cover;
+  background-position: left center;
   height: 70vh;
 }
 .search-container {
@@ -32,4 +33,11 @@ code {
   width: 150px;
   flex-basis: 150px;
   flex-grow: 1;
+}
+
+@media only screen and (max-width: 640px) {
+  .home_page {
+    background-image: url("../assets/images/mobile-header.jpg");
+    background-position: top center;
+  }
 }

@@ -8,7 +8,7 @@ type FieldType = {
   remember?: string;
 };
 
-const Login: FC = () => {
+const LoginPage: FC = () => {
   const { mutate } = useCreate();
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
@@ -26,7 +26,10 @@ const Login: FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-[90vh]">
+    <div
+      className="flex justify-center items-center"
+      style={{ height: "calc(100vh - 150px)" }}
+    >
       <div className="bg-white flex flex-col p-10 rounded-xl border border-[#E0EBDE]">
         <Form
           name="basic"
@@ -70,4 +73,4 @@ const Login: FC = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

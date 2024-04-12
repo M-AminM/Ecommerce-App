@@ -2,13 +2,13 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 export const useFetch = (url: string | null, params?: object) => {
-  const { data, isPending } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: [url!, params],
     queryFn: ({ queryKey }) => fetcher({ queryKey }),
     enabled: !!url,
   });
 
-  return { data, isPending };
+  return { data, isPending, isError };
 };
 
 export const useCreate = () => {
