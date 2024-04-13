@@ -20,6 +20,7 @@ func getProducts(context *gin.Context) {
 
 func getProductsByCategoryId(context *gin.Context) {
 	productId, err := strconv.ParseInt(context.Param("categoryId"), 10, 64)
+
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "could not parse product id"})
 		return
@@ -31,7 +32,20 @@ func getProductsByCategoryId(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "success", "products": product})
+	id := context.Query("id")
+	if id == "" {
+		context.JSON(http.StatusOK, gin.H{"message": "success", "products": product})
+	} else {
+		newId, _ := strconv.ParseInt(id, 10, 64)
+		productfr, err := models.GetProductById(newId)
+		if err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
+			return
+		}
+
+		context.JSON(http.StatusOK, gin.H{"message": "success", "products": productfr})
+	}
+
 }
 
 func getProductById(context *gin.Context) {
