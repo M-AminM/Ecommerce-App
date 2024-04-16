@@ -11,4 +11,12 @@ export const RoutesData = [
     path: "/product-category/:category",
     pathComponent: "ProductCategory",
   },
+  {
+    path: "/product-category/:category/:id",
+    pathComponent: "Product",
+  },
+  {
+    path: "/cart",
+    pathComponent: "Cart",
+  },
 ];

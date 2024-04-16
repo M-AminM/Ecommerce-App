@@ -39,7 +39,10 @@ const Header: FC = () => {
           className="text-xl cursor-pointer hover:text-[#00D783] duration-150"
           onClick={() => navigate("/login")}
         />
-        <RiShoppingCartLine className="text-xl cursor-pointer hover:text-[#00D783] duration-150" />
+        <RiShoppingCartLine
+          className="text-xl cursor-pointer hover:text-[#00D783] duration-150"
+          onClick={() => navigate("/cart")}
+        />
       </div>
     </div>
   );
