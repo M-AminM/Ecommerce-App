@@ -17,6 +17,6 @@ func RegisterRoutes(server *gin.Engine) {
 
 	server.POST("/users", createUser)
 	server.GET("/products", getProducts)
-	server.GET("/products/category/:categoryId", getProductsByCategoryId)
 	server.GET("/products/:id", getProductById)
+	server.POST("/cart", addCart)
 }

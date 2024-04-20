@@ -36,7 +36,7 @@ func GetAllProducts() ([]Product, error) {
 	return products, nil
 }
 
-func GetProductByCategoryId(categoryId int64) ([]Product, error) {
+func GetProductsByCategoryId(categoryId int64) ([]Product, error) {
 	rows, err := db.DB.Query("SELECT * from products where category_id=?", categoryId)
 	if err != nil {
 		return nil, err
