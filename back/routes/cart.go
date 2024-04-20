@@ -12,13 +12,13 @@ func addCart(context *gin.Context) {
 	var cart models.Cart
 
 	err := context.ShouldBindJSON(&cart)
-	fmt.Println(err)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "some fields are missing"})
 		return
 	}
 
 	err = models.AddCart(cart)
+	fmt.Println(err)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not create cart"})
 		return
