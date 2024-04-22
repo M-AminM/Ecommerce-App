@@ -19,7 +19,7 @@ func addCart(context *gin.Context) {
 	}
 
 	err = models.AddCart(cart)
-	fmt.Println(err)
+	// fmt.Println(err)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not create cart"})
 		return
@@ -40,13 +40,20 @@ func getCart(context *gin.Context) {
 		}
 
 		cart, err := models.GetCart(userId)
-		fmt.Println(err)
 		if err != nil {
 			context.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
 			return
 		}
 
-		context.JSON(http.StatusOK, gin.H{"message": "success", "products": cart})
+		carts, err := models.GetAllCart(int64(cart.Id))
+		fmt.Println(err)
+
+		if err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
+			return
+		}
+
+		context.JSON(http.StatusOK, gin.H{"cart": carts})
 	} else {
 		context.JSON(http.StatusOK, gin.H{"message": "data not found"})
 	}
