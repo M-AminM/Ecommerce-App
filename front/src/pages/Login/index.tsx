@@ -1,29 +1,10 @@
-import React, { type FC } from "react";
-import { Button, Checkbox, Form, type FormProps, Input, Flex } from "antd";
-import { useCreate } from "../../service/service";
-
-type FieldType = {
-  email?: string;
-  password?: string;
-  remember?: string;
-};
+import React, { Fragment, useState, type FC } from "react";
+import Login from "./Login";
+import { Button } from "antd";
+import Register from "./Register";
 
 const LoginPage: FC = () => {
-  const { mutate } = useCreate();
-
-  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    const props = {
-      url: "users",
-      data: values,
-    };
-    mutate(props);
-  };
-
-  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
-    errorInfo
-  ) => {
-    console.log("Failed:", errorInfo);
-  };
+  const [isLogin, setIsLogin] = useState<boolean>(true);
 
   return (
     <div
@@ -31,41 +12,23 @@ const LoginPage: FC = () => {
       style={{ height: "calc(100vh - 150px)" }}
     >
       <div className="bg-white flex flex-col p-10 rounded-xl border border-[#E0EBDE]">
-        <Form
-          name="basic"
-          style={{ maxWidth: 600 }}
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-          className="flex flex-col gap-4"
-        >
-          <Form.Item<FieldType>
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: "Please input your email!" }]}
-          >
-            <Input />
-          </Form.Item>
+        <h1 className="text-center text-xl font-semibold pb-10">
+          {isLogin ? "Login" : "Register"}
+        </h1>
+        {isLogin ? <Login /> : <Register />}
 
-          <Form.Item<FieldType>
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+        <div className="flex items-center justify-between">
+          <span className="text-sm">
+            {isLogin ? "Not A Member?" : "You A Member?"}
+          </span>
+          <Button
+            onClick={() => {
+              setIsLogin(!isLogin);
+            }}
+            type="link"
+            htmlType="submit"
           >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item>
-            <Button className="w-full" type="primary" htmlType="submit">
-              Log In
-            </Button>
-          </Form.Item>
-        </Form>
-        <div className="flex justify-between">
-          <span className="text-sm">Not A Member?</span>
-          <Button type="link" htmlType="submit">
-            Register
+            {isLogin ? "Register" : "Login"}
           </Button>
         </div>
       </div>

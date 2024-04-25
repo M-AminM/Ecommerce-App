@@ -16,6 +16,22 @@ type Cart struct {
 	Created_At   interface{}
 }
 
+type FinalCart struct {
+	Id           int
+	Cart_Id      int
+	Product      Pro
+	Quantity     int     `binding:"required"`
+	Total_Amount float64 `binding:"required"`
+}
+
+type Pro struct {
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	Discount    float64 `json:"discount"`
+	Image_Url   string  `json:"image_url"`
+}
+
 type Cartt struct {
 	Id int `json:"cart_id"`
 }
@@ -90,7 +106,7 @@ func GetCart(user_id int64) (Cartt, error) {
 
 }
 
-func GetAllCart(cart_id int64) ([]Carttt, error) {
+func GetAllCart(cart_id int64) ([]FinalCart, error) {
 	rows, err := db.DB.Query("SELECT id, cart_id, product_id, quantity, total_amount from cart_users where cart_id=?", cart_id)
 	if err != nil {
 		return nil, err
@@ -108,5 +124,34 @@ func GetAllCart(cart_id int64) ([]Carttt, error) {
 
 		carts = append(carts, cart)
 	}
-	return carts, nil
+	fmt.Println(carts)
+
+	var product Pro
+	products := []FinalCart{}
+
+	findError := false
+	for _, cart := range carts {
+		row := db.DB.QueryRow("SELECT name, description, price, discount, image_url from products where id=?", cart.Product_Id)
+		err = row.Scan(&product.Name, &product.Description, &product.Price, &product.Discount, &product.Image_Url)
+		if err != nil {
+			findError = true
+		}
+		fmt.Println(err)
+		e := FinalCart{
+			Id:           cart.Id,
+			Cart_Id:      cart.Cart_Id,
+			Product:      product,
+			Quantity:     cart.Quantity,
+			Total_Amount: cart.Total_Amount,
+		}
+
+		products = append(products, e)
+	}
+	if findError {
+		return nil, errors.New("fuck")
+	}
+
+	fmt.Println(products)
+
+	return products, nil
 }

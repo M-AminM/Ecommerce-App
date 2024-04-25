@@ -7,24 +7,11 @@ import { FiPlus, FiMinus } from "react-icons/fi";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { FaCheck } from "react-icons/fa6";
 
-enum Category {
-  vegetables = 1,
-  meat,
-  seafood,
-  eggs,
-  drinks,
-}
-
 const Product: FC = () => {
   const [count, setCount] = useState<number>(0);
   const { id, category }: any = useParams();
-  const params = {
-    id,
-  };
-  const { data, isPending, isError } = useFetch(
-    `products/category/${Category[category!]}`,
-    params
-  );
+
+  const { data, isPending, isError } = useFetch(`products/${id}`);
 
   if (isPending) {
     return (
@@ -40,7 +27,7 @@ const Product: FC = () => {
     name,
     price,
     quantity,
-  }: ProductType = data?.data.products;
+  }: ProductType = data?.data.product;
 
   return (
     <div className={`border border-[#D9E7D6] p-4 rounded-2xl bg-white`}>

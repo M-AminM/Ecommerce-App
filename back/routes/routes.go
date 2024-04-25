@@ -15,7 +15,8 @@ func RegisterRoutes(server *gin.Engine) {
 		MaxAge:           12 * 60 * 60, // Maximum value not ignored by any of major browsers
 	}))
 
-	server.POST("/users", createUser)
+	server.POST("/signup", createUser)
+	server.POST("/login", loginUser)
 	server.GET("/products", getProducts)
 	server.GET("/products/:id", getProductById)
 	server.POST("/cart", addCart)

@@ -44,9 +44,7 @@ enum Category {
 
 const ProductCategoryPage: FC = () => {
   const { category }: any = useParams();
-  const { data, isPending, isError } = useFetch(
-    `products/category/${Category[category!]}`
-  );
+  const { data, isPending, isError } = useFetch(`products`, { categoryId: 1 });
 
   if (isPending) {
     return (
