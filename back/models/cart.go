@@ -17,11 +17,11 @@ type Cart struct {
 }
 
 type FinalCart struct {
-	Id           int
-	Cart_Id      int
-	Product      Pro
-	Quantity     int     `binding:"required"`
-	Total_Amount float64 `binding:"required"`
+	Id           int     `json:"id"`
+	Cart_Id      int     `json:"cart_id"`
+	Product      Pro     `json:"product"`
+	Quantity     int     `binding:"required" json:"quantity"`
+	Total_Amount float64 `binding:"required" json:"total_amount"`
 }
 
 type Pro struct {

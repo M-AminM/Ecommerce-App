@@ -13,7 +13,7 @@ const Product: FC<ProductProps> = ({ product, index }) => {
 
   return (
     <div
-      className={` border-r border-b border-[#D9E7D6] p-4 ${
+      className={`border-r border-b border-[#D9E7D6] p-4 ${
         12 === index ? "rounded-br-2xl" : ""
       }`}
     >

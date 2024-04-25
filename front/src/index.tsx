@@ -49,6 +49,10 @@ root.render(
                 colorPrimary: "#243F2F",
                 algorithm: true,
               },
+              Radio: {
+                colorPrimary: "#243F2F",
+                algorithm: true,
+              },
             },
           }}
         >
