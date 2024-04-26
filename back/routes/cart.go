@@ -18,7 +18,11 @@ func addCart(context *gin.Context) {
 		return
 	}
 
-	err = models.AddCart(cart)
+	token := context.Request.Header.Get("Authorization")
+
+	claims, _ := utils.ExtractClaimsFromToken(token)
+
+	err = models.AddCart(cart, claims.UserID)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not create cart"})
