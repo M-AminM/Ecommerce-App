@@ -39,21 +39,21 @@ func CreateNewUser(user User) error {
 	return nil
 }
 
-func ValidateUser(user User) error {
+func ValidateUser(user User) (int, error) {
 	row := db.DB.QueryRow("SELECT id, password FROM users WHERE email=?", user.Email)
 
 	var retrievedPassword string
 	err := row.Scan(&user.Id, &retrievedPassword)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	passwordIsValid := utils.CheckPasswordHash(user.Password, retrievedPassword)
 	if !passwordIsValid {
-		return errors.New("credentials invalid")
+		return 0, errors.New("credentials invalid")
 	}
 
-	return nil
+	return user.Id, nil
 
 }

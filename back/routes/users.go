@@ -36,18 +36,18 @@ func loginUser(context *gin.Context) {
 		return
 	}
 
-	err = models.ValidateUser(user)
+	user_id, err := models.ValidateUser(user)
 	if err != nil {
 		context.JSON(http.StatusUnauthorized, gin.H{"message": "could not authenticate user"})
 		return
 	}
 
-	token, err := utils.GenerateToken(user.Email, user.Id)
+	token, err := utils.GenerateToken(user.Email, user_id)
 	fmt.Println(err)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not authenticate user"})
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "login successful", "token": token})
+	context.JSON(http.StatusOK, gin.H{"message": "login successful", "token": token, "user_id": user_id})
 }
