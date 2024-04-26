@@ -3,10 +3,12 @@ package routes
 import (
 	"back/models"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func addCart(context *gin.Context) {
@@ -19,7 +21,7 @@ func addCart(context *gin.Context) {
 	}
 
 	err = models.AddCart(cart)
-	// fmt.Println(err)
+
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not create cart"})
 		return
@@ -30,6 +32,14 @@ func addCart(context *gin.Context) {
 
 func getCart(context *gin.Context) {
 	user_id := context.Query("user_id")
+	token := context.Request.Header.Get("Authorization")
+
+	dsa, _ := extractClaims(token)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	fmt.Println(dsa)
 
 	if user_id != "" {
 		userId, err := strconv.ParseInt(user_id, 10, 64)
@@ -46,7 +56,7 @@ func getCart(context *gin.Context) {
 		}
 
 		carts, err := models.GetAllCart(int64(cart.Id))
-		fmt.Println(err)
+		// fmt.Println(err)
 
 		if err != nil {
 			context.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
@@ -56,5 +66,25 @@ func getCart(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{"cart": carts})
 	} else {
 		context.JSON(http.StatusOK, gin.H{"message": "data not found"})
+	}
+}
+
+func extractClaims(tokenStr string) (jwt.MapClaims, bool) {
+	hmacSecretString := "supersecret"
+	hmacSecret := []byte(hmacSecretString)
+	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+		// check token signing method etc
+		return hmacSecret, nil
+	})
+
+	if err != nil {
+		return nil, false
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, true
+	} else {
+		log.Printf("Invalid JWT Token")
+		return nil, false
 	}
 }

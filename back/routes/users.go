@@ -2,6 +2,8 @@ package routes
 
 import (
 	"back/models"
+	"back/utils"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -40,5 +42,12 @@ func loginUser(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "login successful"})
+	token, err := utils.GenerateToken(user.Email, user.Id)
+	fmt.Println(err)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not authenticate user"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "login successful", "token": token})
 }

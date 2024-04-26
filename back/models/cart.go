@@ -46,29 +46,60 @@ type Carttt struct {
 
 func AddCart(cart Cart) error {
 	var existingUserID int
-	err := db.DB.QueryRow("SELECT user_id FROM cart WHERE user_id = ?", cart.User_Id).Scan(&existingUserID)
-	// fmt.Println(existingUserID)
-	fmt.Println(err)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			// Not Found
-			insert1, err := db.DB.Query(`INSERT INTO cart (user_id) VALUES (?)`, cart.User_Id)
-			if err != nil {
-				return err
-			}
-			defer insert1.Close()
+	err := db.DB.QueryRow("SELECT id FROM cart WHERE user_id = ?", cart.User_Id).Scan(&existingUserID)
 
-			insert2, err := db.DB.Query(`INSERT INTO cart_users (cart_id, user_id, product_id, quantity, total_amount) VALUES (?, ?, ?, ?, ?)`, cart.Id, cart.User_Id, cart.Product_Id, cart.Quantity, cart.Total_Amount)
+	if err == sql.ErrNoRows {
+		// Not Found
+		// insert1, err := db.DB.Query(`INSERT INTO cart (user_id) VALUES (?)`, cart.User_Id)
+		// if err != nil {
+		// 	return err
+		// }
+		// defer insert1.Close()
+		// var lastID int64
 
-			if err != nil {
-				return err
-			}
+		// err = db.DB.QueryRow("SELECT MAX(id) FROM cart").Scan(&lastID)
 
-			defer insert2.Close()
-			return nil
+		// if err != nil {
+		// 	return err
+		// }
+		// insert, err := db.DB.Query(`INSERT INTO cart_users (cart_id, user_id, product_id, quantity, total_amount) VALUES (?, ?, ?, ?, ?)`, lastID+1, cart.User_Id, cart.Product_Id, cart.Quantity, cart.Total_Amount)
 
+		// fmt.Println(err)
+
+		// if err != nil {
+		// 	return err
+		// }
+
+		// defer insert.Close()
+		stmt, err := db.DB.Prepare("INSERT INTO cart (user_id) VALUES (?)")
+		if err != nil {
+			return err
 		}
-		return errors.New("Hi")
+		defer stmt.Close()
+
+		res, err := stmt.Exec(cart.User_Id)
+		if err != nil {
+			return err
+		}
+
+		// Get the ID of the inserted row
+		id, err := res.LastInsertId()
+		if err != nil {
+			return err
+		}
+
+		insert, err := db.DB.Query(`INSERT INTO cart_users (cart_id, user_id, product_id, quantity, total_amount) VALUES (?, ?, ?, ?, ?)`, id, cart.User_Id, cart.Product_Id, cart.Quantity, cart.Total_Amount)
+
+		fmt.Println(err)
+
+		if err != nil {
+			return err
+		}
+
+		insert.Close()
+
+		return nil
+
 	}
 
 	insert, err := db.DB.Query(`INSERT INTO cart_users (cart_id, user_id, product_id, quantity, total_amount) VALUES (?, ?, ?, ?, ?)`, existingUserID, cart.User_Id, cart.Product_Id, cart.Quantity, cart.Total_Amount)
@@ -136,7 +167,7 @@ func GetAllCart(cart_id int64) ([]FinalCart, error) {
 		if err != nil {
 			findError = true
 		}
-		fmt.Println(err)
+		// fmt.Println(err)
 		e := FinalCart{
 			Id:           cart.Id,
 			Cart_Id:      cart.Cart_Id,
@@ -151,7 +182,7 @@ func GetAllCart(cart_id int64) ([]FinalCart, error) {
 		return nil, errors.New("fuck")
 	}
 
-	fmt.Println(products)
+	// fmt.Println(products)
 
 	return products, nil
 }

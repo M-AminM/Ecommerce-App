@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"back/middlewares"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -19,6 +21,9 @@ func RegisterRoutes(server *gin.Engine) {
 	server.POST("/login", loginUser)
 	server.GET("/products", getProducts)
 	server.GET("/products/:id", getProductById)
-	server.POST("/cart", addCart)
-	server.GET("/cart", getCart)
+
+	authenticated := server.Group("/")
+	authenticated.Use(middlewares.Authenticate)
+	authenticated.POST("/cart", addCart)
+	authenticated.GET("/cart", getCart)
 }
