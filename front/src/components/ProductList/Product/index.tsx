@@ -2,6 +2,7 @@ import React, { type FC } from "react";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { ProductType } from "../../../@types/product";
+import { useCreate } from "../../../service/service";
 
 type ProductProps = {
   product: ProductType;
@@ -10,6 +11,21 @@ type ProductProps = {
 
 const Product: FC<ProductProps> = ({ product, index }) => {
   const navigate = useNavigate();
+  const { mutate, isSuccess, isError, data } = useCreate();
+
+  const addCartHandler = () => {
+    const queryParams = {
+      product_id: product.id,
+      quantity: 1,
+      total_amount: product.price,
+    };
+    console.log(queryParams);
+    const props = {
+      url: "cart",
+      data: queryParams,
+    };
+    mutate(props);
+  };
 
   return (
     <div
@@ -36,7 +52,10 @@ const Product: FC<ProductProps> = ({ product, index }) => {
 
       <div className="flex justify-between items-center">
         <span className="font-bold text-[#02A460]">${product.price}</span>
-        <div className="bg-[#EFF5EE] hover:bg-[#212121] hover:text-[#fff] duration-300 rounded-full p-3 cursor-pointer">
+        <div
+          onClick={addCartHandler}
+          className="bg-[#EFF5EE] hover:bg-[#212121] hover:text-[#fff] duration-300 rounded-full p-3 cursor-pointer"
+        >
           <RiShoppingCartLine className="text-base cursor-pointer" />
         </div>
       </div>

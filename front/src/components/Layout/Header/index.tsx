@@ -1,12 +1,13 @@
-import React, { type FC } from "react";
+import React, { useEffect, useState, type FC } from "react";
 import {
   RiShoppingCartLine,
   RiUserLine,
   RiMenuLine,
   RiSearchLine,
 } from "react-icons/ri";
-import { Input } from "antd";
+import { Badge, Input } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useFetch } from "../../../service/service";
 
 const { Search } = Input;
 
@@ -14,6 +15,19 @@ const { Search } = Input;
 //   console.log(info?.source, value);
 
 const Header: FC = () => {
+  const token = localStorage.getItem("token");
+  const { data, refetch, isSuccess } = useFetch(`user/37`);
+  const {
+    data: cartData,
+    refetch: refetchCartData,
+    isSuccess: isCartSuccess,
+  } = useFetch(`cart`);
+
+  useEffect(() => {
+    refetch();
+    refetchCartData();
+  }, [token]);
+
   const navigate = useNavigate();
   return (
     <div className="bg-white flex justify-between items-center px-4 py-4 md:px-10 sticky top-0 left-0 z-10">
@@ -34,15 +48,22 @@ const Header: FC = () => {
         prefix={<RiSearchLine className="text-[#243F2F] pr-2 text-2xl" />}
         className="hidden h-10 md:w-1/3 md:flex"
       />
-      <div className="flex gap-4">
+      <div className="flex items-center gap-4">
+        <span>{isSuccess && token && data?.data.user.email}</span>
+
         <RiUserLine
           className="text-xl cursor-pointer hover:text-[#00D783] duration-150"
-          onClick={() => navigate("/login")}
+          onClick={() => navigate(`${token ? "/profile" : "/cart"}`)}
         />
-        <RiShoppingCartLine
-          className="text-xl cursor-pointer hover:text-[#00D783] duration-150"
-          onClick={() => navigate("/cart")}
-        />
+        <Badge
+          count={isSuccess && token ? cartData?.data.cart.length : 0}
+          color="#243F2F"
+        >
+          <RiShoppingCartLine
+            className="text-xl cursor-pointer hover:text-[#00D783] duration-150"
+            onClick={() => navigate("/cart")}
+          />
+        </Badge>
       </div>
     </div>
   );

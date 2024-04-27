@@ -5,6 +5,7 @@ import (
 	"back/utils"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -50,4 +51,24 @@ func loginUser(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "login successful", "token": token, "user_id": user_id})
+}
+
+func getUserById(context *gin.Context) {
+	user_id, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	// token := context.Request.Header.Get("Authorization")
+
+	// claims, ok := utils.ExtractClaimsFromToken(token)
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "could not parse product id"})
+		return
+	}
+
+	user, err := models.GetUserById(user_id)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"user": user})
 }

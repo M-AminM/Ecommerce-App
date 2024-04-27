@@ -57,3 +57,15 @@ func ValidateUser(user User) (int, error) {
 	return user.Id, nil
 
 }
+
+func GetUserById(user_id int64) (*User, error) {
+	row := db.DB.QueryRow("SELECT id, email FROM users WHERE id=?", user_id)
+
+	var user User
+	err := row.Scan(&user.Id, &user.Email)
+
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}

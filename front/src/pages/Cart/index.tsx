@@ -10,7 +10,7 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 const Cart: FC = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState<any>(1);
-  const { data, isPending, isError } = useFetch(`cart?user_id=1`);
+  const { data, isPending, isError } = useFetch(`cart`);
   if (isPending) {
     return (
       <div className="flex justify-center items-center">
