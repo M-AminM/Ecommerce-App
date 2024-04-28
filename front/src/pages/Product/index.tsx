@@ -6,12 +6,15 @@ import { ProductType } from "../../@types/product";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { FaCheck } from "react-icons/fa6";
+import { useGetProductById } from "../../api/product";
 
 const Product: FC = () => {
   const [count, setCount] = useState<number>(0);
   const { id, category }: any = useParams();
 
-  const { data, isPending, isError } = useFetch(`products/${id}`);
+  // const { data, isPending, isError } = useFetch(`products/${id}`);
+
+  const { data, isPending, isError } = useGetProductById(id);
 
   if (isPending) {
     return (
@@ -20,14 +23,8 @@ const Product: FC = () => {
       </div>
     );
   }
-  const {
-    description,
-    discount,
-    image_url,
-    name,
-    price,
-    quantity,
-  }: ProductType = data?.data.product;
+  const { description, discount, image_url, name, price, quantity } =
+    data!.data;
 
   return (
     <div className={`border border-[#D9E7D6] p-4 rounded-2xl bg-white`}>

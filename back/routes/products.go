@@ -32,7 +32,7 @@ func getProducts(context *gin.Context) {
 			return
 		}
 
-		context.JSON(http.StatusOK, gin.H{"message": "success", "products": product})
+		context.JSON(http.StatusOK, gin.H{"message": "success", "isSuccess": true, "data": product})
 	} else {
 		context.JSON(http.StatusOK, products)
 	}
@@ -51,5 +51,5 @@ func getProductById(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "success", "product": product})
+	context.JSON(http.StatusOK, gin.H{"message": "success", "isSuccess": true, "data": product})
 }

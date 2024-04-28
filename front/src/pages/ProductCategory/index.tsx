@@ -6,6 +6,7 @@ import { Button, Dropdown, Space, Spin } from "antd";
 import { Slider } from "antd";
 import { RiArrowDownSLine } from "react-icons/ri";
 import ProductList from "../../components/ProductList";
+import { useGetProducts } from "../../api/product";
 
 const onChange = (value: number | number[]) => {
   console.log("onChange: ", value);
@@ -44,7 +45,12 @@ enum Category {
 
 const ProductCategoryPage: FC = () => {
   const { category }: any = useParams();
-  const { data, isPending, isError } = useFetch(`products`, { categoryId: 1 });
+  const { data, isPending, isError, isSuccess } = useGetProducts({
+    categoryId: 1,
+  });
+  // if (isSuccess) {
+
+  // }
 
   if (isPending) {
     return (
@@ -80,9 +86,7 @@ const ProductCategoryPage: FC = () => {
       </div>
       <div className="w-full border-l border-[#D9E7D6] rounded-r-2xl flex flex-col">
         <div className="flex justify-between border-b border-r rounded-t-2xl border-[#D9E7D6] p-4">
-          <p className="text-sm">
-            Showing all {data?.data.products.length} results
-          </p>
+          <p className="text-sm">Showing all {data?.data.length} results</p>
           <Dropdown menu={{ items }} trigger={["click"]}>
             <a
               className="text-sm cursor-pointer"
@@ -95,7 +99,7 @@ const ProductCategoryPage: FC = () => {
             </a>
           </Dropdown>
         </div>
-        <ProductList data={data?.data.products} />
+        <ProductList data={data!.data} />
       </div>
     </div>
   );
