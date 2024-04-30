@@ -1,4 +1,4 @@
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./api";
 
 interface FetchInterface<T> {
@@ -7,9 +7,7 @@ interface FetchInterface<T> {
   data: T;
 }
 
-export const fetcher: any = async <T>({
-  queryKey, //   pageParam,
-}: any): Promise<T> => {
+export const fetcher: any = async <T>({ queryKey }: any): Promise<T> => {
   const [url, params] = queryKey;
   const res = await api.get<T>(`http://localhost:8080/${url}`, {
     params: { ...params },
@@ -17,21 +15,30 @@ export const fetcher: any = async <T>({
   return res.data;
 };
 
-export const useFetch = <T>(
-  url: string | null,
-  params?: object
-  // config?: UseQueryOptions<T, Error, T, any>
-) => {
-  const { data, isPending, isError, isSuccess, refetch } = useQuery<
+export const useFetch = <T>(url: string | null, params?: object) => {
+  const { data, isPending, isError, isSuccess, refetch, error } = useQuery<
     FetchInterface<T>
   >({
     queryKey: [url!, params],
     queryFn: ({ queryKey }) => fetcher({ queryKey }),
     enabled: !!url,
-    // ...config,
   });
 
-  return { data, isPending, isError, isSuccess, refetch };
+  return { data, isPending, isError, isSuccess, refetch, error };
+};
+
+export const usePost = <T, S>(url: string) => {
+  const client = useQueryClient();
+  const { mutate, isSuccess, isError, data } = useMutation({
+    mutationFn: (data: S) => {
+      return api.post<T>(`http://localhost:8080/${url}`, data);
+    },
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: [url] });
+    },
+  });
+
+  return { mutate, isSuccess, isError, data };
 };
 
 // https://github.com/horprogs/react-query/blob/master/src/utils/reactQuery.ts

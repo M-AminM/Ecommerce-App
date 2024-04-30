@@ -50,7 +50,15 @@ func loginUser(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "login successful", "token": token, "user_id": user_id})
+	var data struct {
+		token   string
+		user_id int
+	}
+
+	data.token = token
+	data.user_id = user_id
+
+	context.JSON(http.StatusOK, gin.H{"message": "login successful", "isSuccess": true, "data": data})
 }
 
 func getUserById(context *gin.Context) {
@@ -70,5 +78,5 @@ func getUserById(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"user": user})
+	context.JSON(http.StatusOK, gin.H{"message": "success", "isSuccess": true, "data": user})
 }

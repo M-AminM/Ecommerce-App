@@ -2,15 +2,21 @@ import React, { useState, type FC } from "react";
 import { Button, Spin } from "antd";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
-import { useFetch } from "../../service/service";
 import type { RadioChangeEvent } from "antd";
-import { Input, Radio, Space } from "antd";
+import { Radio, Space } from "antd";
 import { FiMinus, FiPlus } from "react-icons/fi";
+import { useGetCart } from "../../api/cart";
 
 const Cart: FC = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState<any>(1);
-  const { data, isPending, isError } = useFetch(`cart`);
+  const { data, isPending, isError, error } = useGetCart();
+  if (isError) {
+    if (error instanceof Error && error.message.includes("401")) {
+      console.log("unuthorized use login");
+    }
+  }
+
   if (isPending) {
     return (
       <div className="flex justify-center items-center">
@@ -23,10 +29,11 @@ const Cart: FC = () => {
     console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
+  console.log(data);
 
   return (
     <div className="bg-white lg:p-10 rounded-2xl">
-      {data?.data.cart.length === 0 ? (
+      {data!.data.length === 0 ? (
         <>
           <HiOutlineShoppingCart className="text-4xl text-[#243F2F]" />
           <h2 className="font-semibold text-[#243F2F] text-base md:text-xl">
@@ -39,7 +46,7 @@ const Cart: FC = () => {
       ) : (
         <div className="flex flex-col md:flex-row gap-2">
           <div className="flex flex-col gap-2 w-full">
-            {data?.data.cart.map((item: any) => (
+            {data!.data.map((item: any) => (
               <div className="flex justify-between border-b border-[#D9E7D6] p-4">
                 <div className="flex items-center gap-2">
                   <img className="w-24" src={item.product.image_url} />

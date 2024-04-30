@@ -8,21 +8,18 @@ export const api = {
       },
       ...params,
     }),
-
   post: <T>(url: string, data: any) =>
     axios.post<T>(url, data, {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
       },
     }),
-
   patch: <T>(url: string, data: any) =>
     axios.patch<T>(url, data, {
       headers: {
         Authorization: `${localStorage.getItem("token")}`,
       },
     }),
-
   delete: <T>(url: string) =>
     axios.delete<T>(url, {
       headers: {

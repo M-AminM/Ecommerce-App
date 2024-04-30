@@ -7,7 +7,9 @@ import {
 } from "react-icons/ri";
 import { Badge, Input } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useFetch } from "../../../service/service";
+import { useFetch } from "../../../service/reactQuery";
+import { useGetUserById } from "../../../api/user";
+import { useGetCart } from "../../../api/cart";
 
 const { Search } = Input;
 
@@ -16,17 +18,20 @@ const { Search } = Input;
 
 const Header: FC = () => {
   const token = localStorage.getItem("token");
-  const { data, refetch, isSuccess } = useFetch(`user/37`);
-  const {
-    data: cartData,
-    refetch: refetchCartData,
-    isSuccess: isCartSuccess,
-  } = useFetch(`cart`);
+  // const { data, refetch, isSuccess } = useGetUserById(
+  //   Number(localStorage.getItem("user_id"))
+  // );
 
-  useEffect(() => {
-    refetch();
-    refetchCartData();
-  }, [token]);
+  // const {
+  //   data: cartData,
+  //   refetch: refetchCartData,
+  //   isSuccess: isCartSuccess,
+  // } = useGetCart();
+
+  // useEffect(() => {
+  //   refetch();
+  //   refetchCartData();
+  // }, [token]);
 
   const navigate = useNavigate();
   return (
@@ -49,21 +54,21 @@ const Header: FC = () => {
         className="hidden h-10 md:w-1/3 md:flex"
       />
       <div className="flex items-center gap-4">
-        <span>{isSuccess && token && data?.data.user.email}</span>
+        {/* <span>{isSuccess && token && data?.data.email}</span> */}
 
         <RiUserLine
           className="text-xl cursor-pointer hover:text-[#00D783] duration-150"
           onClick={() => navigate(`${token ? "/profile" : "/cart"}`)}
         />
-        <Badge
-          count={isSuccess && token ? cartData?.data.cart.length : 0}
+        {/* <Badge
+          count={isSuccess && token ? cartData?.data.length : 0}
           color="#243F2F"
         >
           <RiShoppingCartLine
             className="text-xl cursor-pointer hover:text-[#00D783] duration-150"
             onClick={() => navigate("/cart")}
           />
-        </Badge>
+        </Badge> */}
       </div>
     </div>
   );

@@ -7,9 +7,13 @@ import {
   Input,
   notification,
 } from "antd";
-import { useCreate } from "../../service/service";
+// import { useCreate } from "../../service/service";
 import { NotificationPlacement } from "antd/es/notification/interface";
 import { useNavigate } from "react-router-dom";
+import { useLoginUser } from "../../api/user";
+import { UserPostInterface } from "../../interfaces/user";
+import { usePost } from "../../service/reactQuery";
+import { apiRoutes } from "../../routes/apiRoutes";
 
 type FieldType = {
   email?: string;
@@ -21,7 +25,7 @@ type NotificationType = "success" | "info" | "warning" | "error";
 const Context = React.createContext({ name: "Default" });
 
 const Login: FC = () => {
-  const { mutate, isSuccess, isError, data } = useCreate();
+  const { mutate, isSuccess, isError, data } = useLoginUser();
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const openNotification = (
@@ -38,12 +42,10 @@ const Login: FC = () => {
   };
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    const props = {
-      url: "login",
-      data: values,
-    };
-    mutate(props);
+    mutate(values as UserPostInterface);
   };
+
+  console.log(data?.data.user_id);
 
   useEffect(() => {
     if (isSuccess) {
@@ -52,8 +54,8 @@ const Login: FC = () => {
         "success",
         "Congratulations, your account has been successfully created"
       );
-      localStorage.setItem("token", data?.data.token);
-      localStorage.setItem("user_id", data?.data.user_id);
+      localStorage.setItem("token", data?.data.token!);
+      localStorage.setItem("user_id", data?.data.user_id!);
       setTimeout(() => {
         navigate("/");
       }, 1000);

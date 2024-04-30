@@ -15,6 +15,7 @@ const client = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      throwOnError: true,
     },
   },
 });

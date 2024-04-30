@@ -65,7 +65,7 @@ func getCart(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"cart": carts})
+	context.JSON(http.StatusOK, gin.H{"message": "success", "isSuccess": true, "data": carts})
 	// } else {
 	// 	context.JSON(http.StatusOK, gin.H{"message": "data not found"})
 	// }

@@ -12,7 +12,7 @@ type User struct {
 	Id         int       `json:"id"`
 	Email      string    `binding:"required" json:"email"`
 	Password   string    `binding:"required" json:"password"`
-	Created_At time.Time `json:"json:created_at"`
+	Created_At time.Time `json:"created_at"`
 }
 
 func CreateNewUser(user User) error {
@@ -58,10 +58,16 @@ func ValidateUser(user User) (int, error) {
 
 }
 
-func GetUserById(user_id int64) (*User, error) {
+func GetUserById(user_id int64) (*struct {
+	Id    int    `json:"id"`
+	Email string `json:"email"`
+}, error) {
 	row := db.DB.QueryRow("SELECT id, email FROM users WHERE id=?", user_id)
 
-	var user User
+	var user struct {
+		Id    int    `json:"id"`
+		Email string `json:"email"`
+	}
 	err := row.Scan(&user.Id, &user.Email)
 
 	if err != nil {

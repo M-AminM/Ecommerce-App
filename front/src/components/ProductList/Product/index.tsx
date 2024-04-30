@@ -2,7 +2,6 @@ import React, { type FC } from "react";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { ProductType } from "../../../@types/product";
-import { useCreate } from "../../../service/service";
 
 type ProductProps = {
   product: ProductType;
@@ -11,7 +10,7 @@ type ProductProps = {
 
 const Product: FC<ProductProps> = ({ product, index }) => {
   const navigate = useNavigate();
-  const { mutate, isSuccess, isError, data } = useCreate();
+  // const { mutate, isSuccess, isError, data } = useCreate();
 
   const addCartHandler = () => {
     const queryParams = {
@@ -24,7 +23,7 @@ const Product: FC<ProductProps> = ({ product, index }) => {
       url: "cart",
       data: queryParams,
     };
-    mutate(props);
+    // mutate(props);
   };
 
   return (

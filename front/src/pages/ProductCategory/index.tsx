@@ -1,6 +1,6 @@
 import React, { type FC } from "react";
 import { useParams } from "react-router-dom";
-import { useFetch } from "../../service/service";
+// import { useFetch } from "../../service/service";
 import type { MenuProps, SliderSingleProps } from "antd";
 import { Button, Dropdown, Space, Spin } from "antd";
 import { Slider } from "antd";
@@ -49,7 +49,6 @@ const ProductCategoryPage: FC = () => {
     categoryId: 1,
   });
   // if (isSuccess) {
-
   // }
 
   if (isPending) {

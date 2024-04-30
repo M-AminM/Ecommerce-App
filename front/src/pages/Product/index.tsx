@@ -1,6 +1,5 @@
 import React, { useState, type FC } from "react";
 import { useParams } from "react-router-dom";
-import { useFetch } from "../../service/service";
 import { Button, Spin } from "antd";
 import { ProductType } from "../../@types/product";
 import { FiPlus, FiMinus } from "react-icons/fi";
