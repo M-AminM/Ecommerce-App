@@ -7,6 +7,7 @@ import { Slider } from "antd";
 import { RiArrowDownSLine } from "react-icons/ri";
 import ProductList from "../../components/ProductList";
 import { useGetProducts } from "../../api/product";
+import { ToastContainer } from "react-toastify";
 
 const onChange = (value: number | number[]) => {
   console.log("onChange: ", value);
@@ -59,7 +60,7 @@ const ProductCategoryPage: FC = () => {
     );
   }
 
-  if (isError) {
+  if (isError || !data) {
     return <div>Something wrong happened</div>;
   }
 
@@ -98,7 +99,7 @@ const ProductCategoryPage: FC = () => {
             </a>
           </Dropdown>
         </div>
-        <ProductList data={data!.data} />
+        <ProductList data={data.data} />
       </div>
     </div>
   );

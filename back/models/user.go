@@ -15,6 +15,12 @@ type User struct {
 	Created_At time.Time `json:"created_at"`
 }
 
+type UserRes struct {
+	Token   string `json:"token"`
+	User_Id int    `json:"user_id"`
+	Email   string `json:"email"`
+}
+
 func CreateNewUser(user User) error {
 
 	row := db.DB.QueryRow("SELECT id, email FROM users WHERE email=?", user.Email)

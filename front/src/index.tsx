@@ -6,6 +6,7 @@ import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
 import { BrowserRouter } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -16,6 +17,7 @@ const client = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       throwOnError: true,
+      retry: 1,
     },
   },
 });
@@ -46,10 +48,10 @@ root.render(
                 colorPrimary: "#243F2F",
                 algorithm: true,
               },
-              Spin: {
-                colorPrimary: "#243F2F",
-                algorithm: true,
-              },
+              // Spin: {
+              //   colorPrimary: "#243F2F",
+              //   algorithm: true,
+              // },
               Radio: {
                 colorPrimary: "#243F2F",
                 algorithm: true,

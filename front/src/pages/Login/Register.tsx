@@ -1,14 +1,8 @@
 import React, { useEffect, type FC } from "react";
-import {
-  Button,
-  Checkbox,
-  Form,
-  type FormProps,
-  Input,
-  notification,
-} from "antd";
-// import { useCreate } from "../../service/service";
+import { Button, Form, type FormProps, Input, notification } from "antd";
 import { NotificationPlacement } from "antd/es/notification/interface";
+import { useSignupUser } from "../../api/user";
+import { UserPostInterface } from "../../interfaces/user";
 
 type FieldType = {
   email?: string;
@@ -17,11 +11,10 @@ type FieldType = {
 };
 type NotificationType = "success" | "info" | "warning" | "error";
 
-const Context = React.createContext({ name: "Default" });
-
 const Register: FC = () => {
-  // const { mutate, isSuccess, isError } = useCreate();
+  const { mutate, isSuccess, isError } = useSignupUser();
   const [api, contextHolder] = notification.useNotification();
+  const [form] = Form.useForm();
   const openNotification = (
     placement: NotificationPlacement,
     type: NotificationType,
@@ -35,26 +28,23 @@ const Register: FC = () => {
     });
   };
 
-  // const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-  //   const props = {
-  //     url: "signup",
-  //     data: values,
-  //   };
-  //   mutate(props);
-  // };
+  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+    form.resetFields();
+    mutate(values as UserPostInterface);
+  };
 
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     openNotification(
-  //       "topLeft",
-  //       "success",
-  //       "Congratulations, your account has been successfully created"
-  //     );
-  //   }
-  //   if (isError) {
-  //     openNotification("topLeft", "error", "User exists");
-  //   }
-  // }, [isSuccess, isError]);
+  useEffect(() => {
+    if (isSuccess) {
+      openNotification(
+        "topLeft",
+        "success",
+        "Congratulations, your account has been successfully created \n Please login"
+      );
+    }
+    if (isError) {
+      openNotification("topLeft", "error", "email or password is incorrect");
+    }
+  }, [isSuccess, isError]);
 
   const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
     errorInfo
@@ -67,9 +57,10 @@ const Register: FC = () => {
       {contextHolder}
       <Form
         name="basic"
+        form={form}
         style={{ maxWidth: 600 }}
         initialValues={{ remember: true }}
-        // onFinish={onFinish}
+        onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         className="flex flex-col gap-4"

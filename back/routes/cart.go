@@ -53,12 +53,12 @@ func getCart(context *gin.Context) {
 
 	cart, err := models.GetCart(claims.UserID)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
+		context.JSON(http.StatusOK, gin.H{"message": "your cart is empty", "isSuccess": true, "data": []interface{}{}})
 		return
 	}
 
 	carts, err := models.GetAllCart(int64(cart.Id))
-	// fmt.Println(err)
+	fmt.Println("err 2 :  ", err)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})

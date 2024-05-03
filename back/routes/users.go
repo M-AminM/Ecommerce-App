@@ -25,7 +25,7 @@ func createUser(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "user created", "user": user})
+	context.JSON(http.StatusOK, gin.H{"message": "user created", "isSuccess": true, "data": user})
 }
 
 func loginUser(context *gin.Context) {
@@ -50,13 +50,11 @@ func loginUser(context *gin.Context) {
 		return
 	}
 
-	var data struct {
-		token   string
-		user_id int
+	data := models.UserRes{
+		Token:   token,
+		User_Id: user_id,
+		Email:   user.Email,
 	}
-
-	data.token = token
-	data.user_id = user_id
 
 	context.JSON(http.StatusOK, gin.H{"message": "login successful", "isSuccess": true, "data": data})
 }

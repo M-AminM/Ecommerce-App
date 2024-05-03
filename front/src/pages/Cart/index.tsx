@@ -34,7 +34,7 @@ const Cart: FC = () => {
   return (
     <div className="bg-white lg:p-10 rounded-2xl">
       {data!.data.length === 0 ? (
-        <>
+        <div className="flex flex-col gap-4 justify-center items-center p-4">
           <HiOutlineShoppingCart className="text-4xl text-[#243F2F]" />
           <h2 className="font-semibold text-[#243F2F] text-base md:text-xl">
             Your cart is currently empty
@@ -42,7 +42,7 @@ const Cart: FC = () => {
           <Button onClick={() => navigate("/")} className="w-36" type="default">
             Return To Shop
           </Button>
-        </>
+        </div>
       ) : (
         <div className="flex flex-col md:flex-row gap-2">
           <div className="flex flex-col gap-2 w-full">
@@ -78,35 +78,33 @@ const Cart: FC = () => {
             ))}
           </div>
 
-          <div className="p-4">
-            <div className="h-full border border-[#243F2F] rounded-2xl px-4 pt-2 pb-6 w-full md:w-72 lg:w-[28rem]">
-              <div className="flex justify-between items-center border-b border-[#D9E7D6] py-4">
-                <h3 className="text-lg ">Subtotal</h3>
-                <span className="text-[#00AA63] font-bold">$20</span>
-              </div>
-
-              <div className="flex flex-col border-b border-[#D9E7D6] py-4">
-                <h3 className="text-lg pb-2">Shipping</h3>
-                <div className="flex justify-between">
-                  <Radio.Group onChange={onChange} value={value}>
-                    <Space direction="vertical">
-                      <Radio value={1}>Flat rate:</Radio>
-                      <Radio value={2}>Free shipping</Radio>
-                      <Radio value={3}>Local pickup</Radio>
-                    </Space>
-                  </Radio.Group>
-                  <span className="text-[#00AA63] font-bold">$30</span>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center py-4">
-                <h3 className="text-lg py-4">Total</h3>
-                <span className="text-[#00AA63] font-bold">$100</span>
-              </div>
-              <Button className="w-full" type="primary">
-                Checkout
-              </Button>
+          <div className="h-full border border-[#243F2F] rounded-2xl px-4 pt-2 pb-6 w-full md:w-72 lg:w-[28rem]">
+            <div className="flex justify-between items-center border-b border-[#D9E7D6] py-4">
+              <h3 className="text-lg ">Subtotal</h3>
+              <span className="text-[#00AA63] font-bold">$20</span>
             </div>
+
+            <div className="flex flex-col border-b border-[#D9E7D6] py-4">
+              <h3 className="text-lg pb-2">Shipping</h3>
+              <div className="flex justify-between">
+                <Radio.Group onChange={onChange} value={value}>
+                  <Space direction="vertical">
+                    <Radio value={1}>Flat rate:</Radio>
+                    <Radio value={2}>Free shipping</Radio>
+                    <Radio value={3}>Local pickup</Radio>
+                  </Space>
+                </Radio.Group>
+                <span className="text-[#00AA63] font-bold">$30</span>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center py-4">
+              <h3 className="text-lg py-4">Total</h3>
+              <span className="text-[#00AA63] font-bold">$100</span>
+            </div>
+            <Button className="w-full" type="primary">
+              Checkout
+            </Button>
           </div>
         </div>
       )}
