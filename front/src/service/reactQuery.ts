@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import instance from "./interceptor";
-import { useRef } from "react";
 
 interface FetchInterface<T> {
   isSuccess: boolean;

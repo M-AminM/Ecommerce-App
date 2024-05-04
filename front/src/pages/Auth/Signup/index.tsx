@@ -1,23 +1,20 @@
-import React, { Fragment, useEffect, type FC } from "react";
-import { Button, Form, type FormProps, Input, notification, Spin } from "antd";
+import React, { useEffect, type FC } from "react";
+import { Button, Form, type FormProps, Input, notification } from "antd";
 import { NotificationPlacement } from "antd/es/notification/interface";
-import { useNavigate } from "react-router-dom";
-import { UserPostInterface, UserResInterface } from "../../interfaces/user";
-import { useLoginUser } from "../../api/user";
+import { useSignupUser } from "../../../api/user";
+import { UserPostInterface } from "../../../interfaces/user";
 
 type FieldType = {
   email?: string;
   password?: string;
   remember?: string;
 };
-
 type NotificationType = "success" | "info" | "warning" | "error";
 
-const Login: FC = () => {
-  const { mutate, isSuccess, isError, data, isPending } = useLoginUser();
+const Signup: FC = () => {
+  const { mutate, isSuccess, isError } = useSignupUser();
   const [api, contextHolder] = notification.useNotification();
-  const navigate = useNavigate();
-
+  const [form] = Form.useForm();
   const openNotification = (
     placement: NotificationPlacement,
     type: NotificationType,
@@ -32,6 +29,7 @@ const Login: FC = () => {
   };
 
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+    form.resetFields();
     mutate(values as UserPostInterface);
   };
 
@@ -40,14 +38,8 @@ const Login: FC = () => {
       openNotification(
         "topLeft",
         "success",
-        "Congratulations, your account has been successfully login"
+        "Congratulations, your account has been successfully created \n Please login"
       );
-      localStorage.setItem("token", data?.data.data.token!);
-      localStorage.setItem("user_id", data?.data.data.user_id!);
-      localStorage.setItem("email", data?.data.data.email!);
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
     }
     if (isError) {
       openNotification("topLeft", "error", "email or password is incorrect");
@@ -61,10 +53,11 @@ const Login: FC = () => {
   };
 
   return (
-    <Fragment>
+    <>
       {contextHolder}
       <Form
         name="basic"
+        form={form}
         style={{ maxWidth: 600 }}
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -99,12 +92,12 @@ const Login: FC = () => {
 
         <Form.Item>
           <Button className="w-full" type="primary" htmlType="submit">
-            {isPending ? <Spin /> : "Log In"}
+            Register
           </Button>
         </Form.Item>
       </Form>
-    </Fragment>
+    </>
   );
 };
 
-export default Login;
+export default Signup;

@@ -82,7 +82,7 @@ const Cart: FC = () => {
                 <div className="flex items-center gap-2">
                   <RiDeleteBin6Line
                     onClick={() => deleteHandler(item)}
-                    className="text-lg cursor-pointer"
+                    className="text-lg cursor-pointer hover:text-[#00D783] duration-150"
                   />
                   <img className="w-24" src={item.product.image_url} />
                   <div>

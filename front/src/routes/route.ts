@@ -11,22 +11,17 @@ export const RoutesData = [
   },
   {
     path: "/product-category/:category",
-    pathComponent: "ProductCategory",
+    pathComponent: "ProductsCategory",
     isProtected: false,
   },
   {
     path: "/product-category/:category/:id",
-    pathComponent: "Product",
+    pathComponent: "ProductItem",
     isProtected: false,
   },
   {
     path: "/cart",
     pathComponent: "Cart",
-    isProtected: true,
-  },
-  {
-    path: "/profile",
-    pathComponent: "Profile",
     isProtected: true,
   },
 ];

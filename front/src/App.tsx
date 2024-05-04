@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import { RoutesData } from "./routes/route";
 import SuspenseWrapper from "./components/SuspenseWrapper";
-import LoginPage from "./pages/Login";
+import LoginPage from "./pages/Auth";
 import Guard from "./utils/guard";
 import { AxiosInterceptor } from "./service/interceptor";
 

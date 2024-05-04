@@ -1,13 +1,13 @@
 import React, { useEffect, type FC } from "react";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import { ProductType } from "../../../@types/product";
 import { usePostCart } from "../../../api/cart";
 import { NotificationPlacement } from "antd/es/notification/interface";
 import { notification } from "antd";
+import { ProductInterface } from "../../../interfaces/product";
 
 type ProductProps = {
-  product: ProductType;
+  product: ProductInterface;
   index: number;
 };
 

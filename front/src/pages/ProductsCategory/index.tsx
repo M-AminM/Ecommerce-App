@@ -7,7 +7,6 @@ import { Slider } from "antd";
 import { RiArrowDownSLine } from "react-icons/ri";
 import ProductList from "../../components/ProductList";
 import { useGetProducts } from "../../api/product";
-import { ToastContainer } from "react-toastify";
 
 const onChange = (value: number | number[]) => {
   console.log("onChange: ", value);
@@ -44,7 +43,7 @@ enum Category {
   drinks,
 }
 
-const ProductCategoryPage: FC = () => {
+const ProductsCategoryPage: FC = () => {
   const { category }: any = useParams();
   const { data, isPending, isError, isSuccess } = useGetProducts({
     categoryId: 1,
@@ -105,4 +104,4 @@ const ProductCategoryPage: FC = () => {
   );
 };
 
-export default ProductCategoryPage;
+export default ProductsCategoryPage;

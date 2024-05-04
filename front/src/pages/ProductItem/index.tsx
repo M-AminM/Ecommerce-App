@@ -1,13 +1,12 @@
 import React, { useState, type FC } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Spin } from "antd";
-import { ProductType } from "../../@types/product";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { FaCheck } from "react-icons/fa6";
 import { useGetProductById } from "../../api/product";
 
-const Product: FC = () => {
+const ProductItem: FC = () => {
   const [count, setCount] = useState<number>(0);
   const { id, category }: any = useParams();
 
@@ -108,4 +107,4 @@ const Product: FC = () => {
   );
 };
 
-export default Product;
+export default ProductItem;

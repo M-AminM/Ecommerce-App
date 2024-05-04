@@ -1,7 +1,7 @@
 import React, { Fragment, useState, type FC } from "react";
-import Login from "./Login";
+import Signup from "./Signup";
 import { Button } from "antd";
-import Register from "./Register";
+import Login from "./Login";
 
 const LoginPage: FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -15,7 +15,7 @@ const LoginPage: FC = () => {
         <h1 className="text-center text-xl font-semibold pb-10">
           {isLogin ? "Login" : "Register"}
         </h1>
-        {isLogin ? <Login /> : <Register />}
+        {isLogin ? <Login /> : <Signup />}
 
         <div className="flex items-center justify-between">
           <span className="text-sm">

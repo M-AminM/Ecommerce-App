@@ -6,7 +6,7 @@ import App from "./App";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider } from "antd";
 import { BrowserRouter } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -60,6 +60,7 @@ root.render(
           }}
         >
           <App />
+          <ReactQueryDevtools initialIsOpen={false} />
         </ConfigProvider>
       </BrowserRouter>
     </QueryClientProvider>
