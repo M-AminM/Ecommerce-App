@@ -27,4 +27,5 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated.POST("/cart", addCart)
 	authenticated.GET("/cart", getCart)
 	authenticated.GET("/user/:id", getUserById)
+	authenticated.DELETE("/cart/:id", deleteCartItemById)
 }

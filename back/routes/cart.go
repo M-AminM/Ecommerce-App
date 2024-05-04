@@ -5,6 +5,7 @@ import (
 	"back/utils"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +30,7 @@ func addCart(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "cart created", "cart": cart})
+	context.JSON(http.StatusOK, gin.H{"message": "cart created", "isSuccess": true, "data": cart})
 }
 
 func getCart(context *gin.Context) {
@@ -69,4 +70,27 @@ func getCart(context *gin.Context) {
 	// } else {
 	// 	context.JSON(http.StatusOK, gin.H{"message": "data not found"})
 	// }
+}
+
+func deleteCartItemById(context *gin.Context) {
+	token := context.Request.Header.Get("Authorization")
+
+	claims, _ := utils.ExtractClaimsFromToken(token)
+
+	product_id, err := strconv.ParseInt(context.Param("id"), 10, 64)
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "could not parse product id"})
+		return
+	}
+
+	err = models.DeleteCartItem(claims.UserID, product_id)
+	fmt.Println(err)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "something wrong happen"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "successfuly deleted"})
 }

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import instance from "./interceptor";
+import { useRef } from "react";
 
 interface FetchInterface<T> {
   isSuccess: boolean;
@@ -49,6 +50,21 @@ export const usePost = <T, S>(url: string) => {
   });
 
   return { mutate, isSuccess, isError, data, isPending };
+};
+
+export const useDelete = (url: string) => {
+  const client = useQueryClient();
+  const { isPending, mutate, mutateAsync, isSuccess, isError } = useMutation({
+    mutationKey: [`delete/${url}`],
+    mutationFn: (id) => {
+      return instance.delete(`${url}/${id}`);
+    },
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: [url] });
+    },
+  });
+
+  return { mutate, mutateAsync, isPending, isSuccess, isError };
 };
 
 // https://github.com/horprogs/react-query/blob/master/src/utils/reactQuery.ts

@@ -1,21 +1,35 @@
-import React, { useState, type FC } from "react";
-import { Button, Spin } from "antd";
+import React, { useEffect, useState, type FC } from "react";
+import { Button, Spin, notification } from "antd";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import type { RadioChangeEvent } from "antd";
 import { Radio, Space } from "antd";
 import { FiMinus, FiPlus } from "react-icons/fi";
-import { useGetCart } from "../../api/cart";
+import { useDeleteCart, useGetCart } from "../../api/cart";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { NotificationPlacement } from "antd/es/notification/interface";
+
+type NotificationType = "success" | "info" | "warning" | "error";
 
 const Cart: FC = () => {
   const navigate = useNavigate();
+  const [api, contextHolder] = notification.useNotification();
   const [value, setValue] = useState<any>(1);
-  const { data, isPending, isError, error } = useGetCart();
-  if (isError) {
-    if (error instanceof Error && error.message.includes("401")) {
-      console.log("unuthorized use login");
+  const { data, isPending } = useGetCart();
+  const {
+    mutate,
+    isSuccess: isDeleteSuccess,
+    isError: isDeleteError,
+  } = useDeleteCart();
+
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      openNotification("topLeft", "success", "Successfully deleted");
     }
-  }
+    if (isDeleteError) {
+      openNotification("topLeft", "error", "Something wrong happened");
+    }
+  }, [isDeleteSuccess, isDeleteError]);
 
   if (isPending) {
     return (
@@ -29,10 +43,27 @@ const Cart: FC = () => {
     console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
-  console.log(data);
+
+  const deleteHandler = (item: any) => {
+    mutate(item.product.id);
+  };
+
+  const openNotification = (
+    placement: NotificationPlacement,
+    type: NotificationType,
+    description: string
+  ) => {
+    api[type]({
+      message: type,
+      description,
+      placement,
+      duration: 2,
+    });
+  };
 
   return (
     <div className="bg-white lg:p-10 rounded-2xl">
+      {contextHolder}
       {data!.data.length === 0 ? (
         <div className="flex flex-col gap-4 justify-center items-center p-4">
           <HiOutlineShoppingCart className="text-4xl text-[#243F2F]" />
@@ -47,8 +78,12 @@ const Cart: FC = () => {
         <div className="flex flex-col md:flex-row gap-2">
           <div className="flex flex-col gap-2 w-full">
             {data!.data.map((item: any) => (
-              <div className="flex justify-between border-b border-[#D9E7D6] p-4">
+              <div className="flex justify-between border-b border-[#D9E7D6] p-4 ">
                 <div className="flex items-center gap-2">
+                  <RiDeleteBin6Line
+                    onClick={() => deleteHandler(item)}
+                    className="text-lg cursor-pointer"
+                  />
                   <img className="w-24" src={item.product.image_url} />
                   <div>
                     <h3 className="font-semibold text-base">

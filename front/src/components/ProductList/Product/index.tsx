@@ -1,16 +1,34 @@
-import React, { type FC } from "react";
+import React, { useEffect, type FC } from "react";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { ProductType } from "../../../@types/product";
+import { usePostCart } from "../../../api/cart";
+import { NotificationPlacement } from "antd/es/notification/interface";
+import { notification } from "antd";
 
 type ProductProps = {
   product: ProductType;
   index: number;
 };
 
+type NotificationType = "success" | "info" | "warning" | "error";
+
 const Product: FC<ProductProps> = ({ product, index }) => {
   const navigate = useNavigate();
-  // const { mutate, isSuccess, isError, data } = useCreate();
+  const [api, contextHolder] = notification.useNotification();
+  const { mutate, isSuccess, isError } = usePostCart();
+  const openNotification = (
+    placement: NotificationPlacement,
+    type: NotificationType,
+    description: string
+  ) => {
+    api[type]({
+      message: type,
+      description,
+      placement,
+      duration: 2,
+    });
+  };
 
   const addCartHandler = () => {
     const queryParams = {
@@ -18,13 +36,21 @@ const Product: FC<ProductProps> = ({ product, index }) => {
       quantity: 1,
       total_amount: product.price,
     };
-    console.log(queryParams);
-    const props = {
-      url: "cart",
-      data: queryParams,
-    };
-    // mutate(props);
+    mutate(queryParams);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      openNotification(
+        "topLeft",
+        "success",
+        `${product.name} added successfully`
+      );
+    }
+    if (isError) {
+      openNotification("topLeft", "error", "something wrong happened");
+    }
+  }, [isSuccess, isError]);
 
   return (
     <div
@@ -32,6 +58,7 @@ const Product: FC<ProductProps> = ({ product, index }) => {
         12 === index ? "rounded-br-2xl" : ""
       }`}
     >
+      {contextHolder}
       <div
         className="cursor-pointer"
         onClick={() => navigate(`./${product.id}`)}

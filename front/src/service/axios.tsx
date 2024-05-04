@@ -19,7 +19,6 @@ axiosInstance.interceptors.response.use(
       // Handle other cases where user might be authenticated but still received a 401 error
       // You can redirect to login or show a notification
       //   window.location.href = "http://localhost:3000/login";
-      console.log("Fuck");
     }
     return Promise.reject(error);
   }

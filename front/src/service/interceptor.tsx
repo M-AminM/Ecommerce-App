@@ -27,13 +27,13 @@ const AxiosInterceptor = ({ children }: any) => {
     });
   };
 
-  useEffect(() => {
-    instance.interceptors.request.use(async (config) => {
-      const token = localStorage.getItem("token");
-      config.headers.Authorization = `${token}`;
-      return config;
-    });
+  instance.interceptors.request.use(async (config) => {
+    const token = localStorage.getItem("token");
+    config.headers.Authorization = `${token}`;
+    return config;
+  });
 
+  useEffect(() => {
     const resInterceptor = (response: any) => {
       return response;
     };

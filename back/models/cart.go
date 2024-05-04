@@ -25,6 +25,7 @@ type FinalCart struct {
 }
 
 type Pro struct {
+	Id          int     `json:"id"`
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
 	Price       float64 `json:"price"`
@@ -140,8 +141,8 @@ func GetAllCart(cart_id int64) ([]FinalCart, error) {
 
 	findError := false
 	for _, cart := range carts {
-		row := db.DB.QueryRow("SELECT name, description, price, discount, image_url from products where id=?", cart.Product_Id)
-		err = row.Scan(&product.Name, &product.Description, &product.Price, &product.Discount, &product.Image_Url)
+		row := db.DB.QueryRow("SELECT id, name, description, price, discount, image_url from products where id=?", cart.Product_Id)
+		err = row.Scan(&product.Id, &product.Name, &product.Description, &product.Price, &product.Discount, &product.Image_Url)
 		if err != nil {
 			findError = true
 		}
@@ -163,4 +164,22 @@ func GetAllCart(cart_id int64) ([]FinalCart, error) {
 	// fmt.Println(products)
 
 	return products, nil
+}
+
+func DeleteCartItem(user_id, product_id int64) error {
+	row := db.DB.QueryRow("SELECT id from cart_users where user_id=? and product_id=?", user_id, product_id)
+
+	var id int
+	err := row.Scan(&id)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = db.DB.Query("DELETE FROM cart_users where id=?", id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
