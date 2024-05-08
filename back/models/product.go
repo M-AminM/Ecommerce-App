@@ -2,6 +2,7 @@ package models
 
 import (
 	"back/db"
+	"fmt"
 )
 
 type Product struct {
@@ -36,8 +37,10 @@ func GetAllProducts() ([]Product, error) {
 	return products, nil
 }
 
-func GetProductsByCategoryId(categoryId int64) ([]Product, error) {
-	rows, err := db.DB.Query("SELECT * from products where category_id=?", categoryId)
+func GetProductsByCategoryId(categoryId int64, sort string) ([]Product, error) {
+	query := fmt.Sprintf("SELECT * from products where category_id=? ORDER BY price %s", sort)
+	rows, err := db.DB.Query(query, categoryId)
+	fmt.Println(err)
 	if err != nil {
 		return nil, err
 	}

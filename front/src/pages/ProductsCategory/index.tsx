@@ -1,10 +1,7 @@
-import React, { type FC } from "react";
-import { useParams } from "react-router-dom";
-// import { useFetch } from "../../service/service";
-import type { MenuProps, SliderSingleProps } from "antd";
-import { Button, Dropdown, Space, Spin } from "antd";
+import React, { useState, type FC } from "react";
+import type { SliderSingleProps } from "antd";
+import { Button, Select, Spin } from "antd";
 import { Slider } from "antd";
-import { RiArrowDownSLine } from "react-icons/ri";
 import ProductList from "../../components/ProductList";
 import { useGetProducts } from "../../api/product";
 
@@ -16,40 +13,16 @@ const onChangeComplete = (value: number | number[]) => {
   console.log("onChangeComplete: ", value);
 };
 
-const items: MenuProps["items"] = [
-  {
-    label: "Sort by price: low to high",
-    key: "0",
-  },
-  {
-    label: "Sort by price: high to low",
-    key: "1",
-  },
-  {
-    label: "Sort by discount",
-    key: "3",
-  },
-];
-
 const formatter: NonNullable<SliderSingleProps["tooltip"]>["formatter"] = (
   value
 ) => `$${value}`;
 
-enum Category {
-  vegetables = 1,
-  meat,
-  seafood,
-  eggs,
-  drinks,
-}
-
 const ProductsCategoryPage: FC = () => {
-  const { category }: any = useParams();
-  const { data, isPending, isError, isSuccess } = useGetProducts({
+  const [sortPrice, setSortPrice] = useState("");
+  const { data, isPending, isError } = useGetProducts({
     categoryId: 1,
+    sortPrice,
   });
-  // if (isSuccess) {
-  // }
 
   if (isPending) {
     return (
@@ -86,17 +59,19 @@ const ProductsCategoryPage: FC = () => {
       <div className="w-full border-l border-[#D9E7D6] rounded-r-2xl flex flex-col">
         <div className="flex justify-between border-b border-r rounded-t-2xl border-[#D9E7D6] p-4">
           <p className="text-sm">Showing all {data?.data.length} results</p>
-          <Dropdown menu={{ items }} trigger={["click"]}>
-            <a
-              className="text-sm cursor-pointer"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Space>
-                Default sorting
-                <RiArrowDownSLine />
-              </Space>
-            </a>
-          </Dropdown>
+          <Select
+            // defaultValue=""
+            value={sortPrice}
+            style={{ width: 200 }}
+            onChange={(value: string) => {
+              setSortPrice(value);
+            }}
+            options={[
+              { value: "", label: "Not Sort" },
+              { value: "DESC", label: "Sort by price: high to low" },
+              { value: "ASC", label: "Sort by price: low to high" },
+            ]}
+          />
         </div>
         <ProductList data={data.data} />
       </div>

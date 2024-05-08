@@ -26,7 +26,9 @@ func getProducts(context *gin.Context) {
 			return
 		}
 
-		product, err := models.GetProductsByCategoryId(productId)
+		sort := context.Query("sortPrice")
+
+		product, err := models.GetProductsByCategoryId(productId, sort)
 		if err != nil {
 			context.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
 			return
