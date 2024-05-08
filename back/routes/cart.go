@@ -84,7 +84,14 @@ func deleteCartItemById(context *gin.Context) {
 		return
 	}
 
-	err = models.DeleteCartItem(claims.UserID, product_id)
+	id, err := models.CheckUserProductExists(claims.UserID, product_id)
+
+	if err != nil {
+		context.JSON(http.StatusNotFound, gin.H{"message": "data not found"})
+		return
+	}
+
+	err = models.DeleteCartItem(id)
 	fmt.Println(err)
 
 	if err != nil {

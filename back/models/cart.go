@@ -81,6 +81,14 @@ func AddCart(cart Cart, user_id int64) error {
 
 	}
 
+	var id int
+	row := db.DB.QueryRow("SELECT id from cart_users where user_id=? and product_id=?", user_id, cart.Product_Id)
+	_ = row.Scan(&id)
+
+	if id > 0 {
+		return errors.New("can not add new items")
+	}
+
 	insert, err := db.DB.Query(`INSERT INTO cart_users (cart_id, user_id, product_id, quantity, total_amount) VALUES (?, ?, ?, ?, ?)`, existingUserID, user_id, cart.Product_Id, cart.Quantity, cart.Total_Amount)
 
 	if err != nil {
@@ -166,20 +174,33 @@ func GetAllCart(cart_id int64) ([]FinalCart, error) {
 	return products, nil
 }
 
-func DeleteCartItem(user_id, product_id int64) error {
+func DeleteCartItem(id int) error {
+	// row := db.DB.QueryRow("SELECT id from cart_users where user_id=? and product_id=?", user_id, product_id)
+
+	// var id int
+	// err := row.Scan(&id)
+
+	// if err != nil {
+	// 	return err
+	// }
+
+	_, err := db.DB.Query("DELETE FROM cart_users where id=?", id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func CheckUserProductExists(user_id, product_id int64) (int, error) {
 	row := db.DB.QueryRow("SELECT id from cart_users where user_id=? and product_id=?", user_id, product_id)
 
 	var id int
 	err := row.Scan(&id)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	_, err = db.DB.Query("DELETE FROM cart_users where id=?", id)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return id, nil
 }
