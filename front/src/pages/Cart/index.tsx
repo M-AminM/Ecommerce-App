@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import type { RadioChangeEvent } from "antd";
 import { Radio, Space } from "antd";
 import { FiMinus, FiPlus } from "react-icons/fi";
-import { useDeleteCart, useGetCart } from "../../api/cart";
+import { useDeleteCart, useGetCart, useUpdateCart } from "../../api/cart";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { NotificationPlacement } from "antd/es/notification/interface";
 
@@ -21,6 +21,7 @@ const Cart: FC = () => {
     isSuccess: isDeleteSuccess,
     isError: isDeleteError,
   } = useDeleteCart();
+  const { mutate: mutateCart } = useUpdateCart();
 
   useEffect(() => {
     if (isDeleteSuccess) {
@@ -61,6 +62,19 @@ const Cart: FC = () => {
     });
   };
 
+  const updateCart = (item: any) => {
+    const data = {
+      quantity: item.quantity,
+      product_id: item.product.id,
+    };
+    mutateCart(data);
+  };
+
+  const totalPrice =
+    Math.round(
+      data!.data.reduce((n, { total_amount }) => n + total_amount, 0) * 100
+    ) / 100;
+
   return (
     <div className="bg-white lg:p-10 rounded-2xl">
       {contextHolder}
@@ -78,7 +92,10 @@ const Cart: FC = () => {
         <div className="flex flex-col md:flex-row gap-2">
           <div className="flex flex-col gap-2 w-full">
             {data!.data.map((item: any) => (
-              <div className="flex justify-between border-b border-[#D9E7D6] p-4 ">
+              <div
+                className="flex justify-between border-b border-[#D9E7D6] p-4 "
+                key={item.id}
+              >
                 <div className="flex items-center gap-2">
                   <RiDeleteBin6Line
                     onClick={() => deleteHandler(item)}
@@ -96,14 +113,32 @@ const Cart: FC = () => {
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
-                      <div className="p-1 rounded-lg border border-[#D9E7D6]">
+                      <Button
+                        disabled={item.quantity < 1}
+                        className="p-1 h-6 rounded-lg border border-[#D9E7D6]"
+                        onClick={() => {
+                          item.quantity -= 1;
+                          if (item.quantity === 0) {
+                            deleteHandler(item);
+                            return;
+                          }
+                          updateCart(item);
+                        }}
+                      >
                         <FiMinus className="cursor-pointer" />
-                      </div>
+                      </Button>
 
                       {item.quantity}
-                      <div className="p-1 rounded-lg border border-[#D9E7D6]">
+                      <Button
+                        disabled={item.quantity >= item.product.quantity}
+                        className="p-1 h-6 rounded-lg border border-[#D9E7D6]"
+                        onClick={() => {
+                          item.quantity += 1;
+                          updateCart(item);
+                        }}
+                      >
                         <FiPlus className="cursor-pointer" />
-                      </div>
+                      </Button>
                     </div>
                   </div>
 
@@ -116,7 +151,9 @@ const Cart: FC = () => {
           <div className="h-full border border-[#243F2F] rounded-2xl px-4 pt-2 pb-6 w-full md:w-72 lg:w-[28rem]">
             <div className="flex justify-between items-center border-b border-[#D9E7D6] py-4">
               <h3 className="text-lg ">Subtotal</h3>
-              <span className="text-[#00AA63] font-bold">$20</span>
+              <span className="text-[#00AA63] font-bold">
+                ${Math.round(totalPrice * 100) / 100}
+              </span>
             </div>
 
             <div className="flex flex-col border-b border-[#D9E7D6] py-4">
@@ -135,7 +172,9 @@ const Cart: FC = () => {
 
             <div className="flex justify-between items-center py-4">
               <h3 className="text-lg py-4">Total</h3>
-              <span className="text-[#00AA63] font-bold">$100</span>
+              <span className="text-[#00AA63] font-bold">
+                ${Math.round((totalPrice + 30) * 100) / 100}
+              </span>
             </div>
             <Button className="w-full" type="primary">
               Checkout

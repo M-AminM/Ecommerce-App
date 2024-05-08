@@ -32,12 +32,14 @@ const App: FC = () => {
                   <SuspenseWrapper path={route.pathComponent} />
                 </Guard>
               }
+              key={route.path}
             />
           ))}
           {notProtectedRoutes.map((route) => (
             <Route
               path={route.path}
               element={<SuspenseWrapper path={route.pathComponent} />}
+              key={route.path}
             />
           ))}
         </Route>

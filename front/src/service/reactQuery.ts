@@ -37,14 +37,16 @@ export const useFetch = <T>(url: string | null, params?: object) => {
   };
 };
 
-export const usePost = <T, S>(url: string) => {
+export const usePost = <T, S>(url: string, urlToUpdate?: string) => {
   const client = useQueryClient();
   const { mutate, isSuccess, isError, data, isPending } = useMutation({
     mutationFn: (data: S) => {
       return instance.post<FetchInterface<T>>(url, data);
     },
     onSuccess: () => {
-      client.invalidateQueries({ queryKey: [url] });
+      if (urlToUpdate) {
+        client.invalidateQueries({ queryKey: [urlToUpdate] });
+      }
     },
   });
 

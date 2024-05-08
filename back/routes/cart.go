@@ -101,3 +101,39 @@ func deleteCartItemById(context *gin.Context) {
 
 	context.JSON(http.StatusOK, gin.H{"message": "successfuly deleted"})
 }
+
+func updateCart(context *gin.Context) {
+	var updateCart models.UpdateCart
+	err := context.ShouldBind(&updateCart)
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "some fields are missing"})
+		return
+	}
+
+	token := context.Request.Header.Get("Authorization")
+	claims, _ := utils.ExtractClaimsFromToken(token)
+
+	_, err = models.CheckUserProductExists(claims.UserID, int64(updateCart.Product_id))
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "data not found"})
+		return
+	}
+
+	err = models.CheckProductQuantity(updateCart)
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "quantity has mistake"})
+		return
+	}
+
+	err = models.UpdateCartItem(updateCart, int(claims.UserID))
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "could not update data"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "successfully updated"})
+
+}

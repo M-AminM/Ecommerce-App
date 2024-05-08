@@ -6,4 +6,5 @@ export const apiRoutes = {
   getUserByID: "user/:id",
   getLogin: "login",
   getSignup: "signup",
+  getUpdateCart: "cart/update",
 };

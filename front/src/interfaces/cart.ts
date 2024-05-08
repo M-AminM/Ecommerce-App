@@ -28,3 +28,8 @@ export interface CartResInterface {
   Total_Amount: number;
   Created_At: string;
 }
+
+export interface CartUpdateInterface {
+  quantity: number;
+  product_id: number;
+}

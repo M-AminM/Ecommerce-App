@@ -31,6 +31,7 @@ type Pro struct {
 	Price       float64 `json:"price"`
 	Discount    float64 `json:"discount"`
 	Image_Url   string  `json:"image_url"`
+	Quantity    int     `json:"quantity"`
 }
 
 type Cartt struct {
@@ -43,6 +44,11 @@ type Carttt struct {
 	Product_Id   int     `binding:"required"`
 	Quantity     int     `binding:"required"`
 	Total_Amount float64 `binding:"required"`
+}
+
+type UpdateCart struct {
+	Product_id int `json:"product_id"`
+	Quantity   int `json:"quantity"`
 }
 
 func AddCart(cart Cart, user_id int64) error {
@@ -149,8 +155,8 @@ func GetAllCart(cart_id int64) ([]FinalCart, error) {
 
 	findError := false
 	for _, cart := range carts {
-		row := db.DB.QueryRow("SELECT id, name, description, price, discount, image_url from products where id=?", cart.Product_Id)
-		err = row.Scan(&product.Id, &product.Name, &product.Description, &product.Price, &product.Discount, &product.Image_Url)
+		row := db.DB.QueryRow("SELECT id, name, description, price, discount, image_url, quantity from products where id=?", cart.Product_Id)
+		err = row.Scan(&product.Id, &product.Name, &product.Description, &product.Price, &product.Discount, &product.Image_Url, &product.Quantity)
 		if err != nil {
 			findError = true
 		}
@@ -203,4 +209,51 @@ func CheckUserProductExists(user_id, product_id int64) (int, error) {
 	}
 
 	return id, nil
+}
+
+func UpdateCartItem(cartUpdate UpdateCart, user_id int) error {
+	// var quantity int
+	// row := db.DB.QueryRow("SELECT quantity from cart_users WHERE user_id=? and product_id=?", user_id, cartUpdate.Product_id)
+
+	// err := row.Scan(&quantity)
+
+	// if err != nil {
+	// 	return err
+	// }
+
+	row := db.DB.QueryRow("SELECT price from products WHERE id=?", cartUpdate.Product_id)
+	var price float64
+	err := row.Scan(&price)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = db.DB.Exec("UPDATE cart_users set quantity = ?, total_amount = ? WHERE user_id=? and product_id=?", cartUpdate.Quantity, price*float64(cartUpdate.Quantity), user_id, cartUpdate.Product_id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func CheckProductQuantity(cartUpdate UpdateCart) error {
+	if cartUpdate.Quantity < 0 {
+		return errors.New("quantity can not be negative")
+	}
+
+	row := db.DB.QueryRow("SELECT quantity from products WHERE id=?", cartUpdate.Product_id)
+	var quantity int
+	err := row.Scan(&quantity)
+
+	if err != nil {
+		return err
+	}
+
+	if cartUpdate.Quantity > quantity {
+		return errors.New("quantity is more than main quantity")
+	}
+
+	return nil
 }
